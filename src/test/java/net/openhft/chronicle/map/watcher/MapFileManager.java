@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 Chronicle Software Ltd
+ * Copyright (c) 2016-2020 chronicle.software
  */
 
 package net.openhft.chronicle.map.watcher;
@@ -28,6 +28,7 @@ public class MapFileManager extends JMXFileManager implements MapFileManagerMBea
     private String name;
     private long dataStoreSize;
     private int segments;
+    private long lastUpdate = 0;
 
     public MapFileManager(String basePath, String relativePath) {
         super(basePath, relativePath);
@@ -38,19 +39,17 @@ public class MapFileManager extends JMXFileManager implements MapFileManagerMBea
         return "maps";
     }
 
-    private long lastUpdate = 0;
-
     public String getHeader() {
         update();
         return header;
     }
 
     public String getKeyClass() {
-        return ""+keyClass;
+        return "" + keyClass;
     }
 
     public String getValueClass() {
-        return ""+valueClass;
+        return "" + valueClass;
     }
 
     public long getSize() {
@@ -104,7 +103,6 @@ public class MapFileManager extends JMXFileManager implements MapFileManagerMBea
                 map.createMappedStoreAndSegments(
                         new PersistedChronicleHashResources(file));
 
-
                 keyClass = map.keyType();
                 valueClass = map.valueType();
                 size = map.longSize();
@@ -116,7 +114,7 @@ public class MapFileManager extends JMXFileManager implements MapFileManagerMBea
             Jvm.warn().on(getClass(), "Unable to update", e);
             header = e.toString();
         } finally {
-            mf.release();
+            mf.releaseLast();
             assert mf.refCount() == 0;
         }
     }

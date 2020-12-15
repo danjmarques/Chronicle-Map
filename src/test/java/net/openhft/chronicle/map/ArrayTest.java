@@ -17,6 +17,7 @@
 package net.openhft.chronicle.map;
 
 import net.openhft.chronicle.core.OS;
+import net.openhft.chronicle.core.util.Time;
 import org.junit.Test;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class ArrayTest {
     // don't use Double[] as it uses ~3.5x the memory of a double[]
     @Test
     public void testDoubleArray() throws IOException {
-        File file = new File(OS.getTarget() + "/testDoubleArray-" + System.nanoTime());
+        File file = new File(OS.getTarget() + "/testDoubleArray-" + Time.uniqueId());
         ChronicleMap<Long, double[]> writeMap = ChronicleMapBuilder
                 .of(Long.class, double[].class)
                 .entries(1_000)
@@ -46,7 +47,7 @@ public class ArrayTest {
     // don't use Long[] as it uses ~3.5x the memory of a long[]
     @Test
     public void testLongArray() throws IOException {
-        File file = new File(OS.getTarget() + "/testLongArray-" + System.nanoTime());
+        File file = new File(OS.getTarget() + "/testLongArray-" + Time.uniqueId());
         ChronicleMap<Long, long[]> writeMap = ChronicleMapBuilder
                 .of(Long.class, long[].class)
                 .entries(1_000)

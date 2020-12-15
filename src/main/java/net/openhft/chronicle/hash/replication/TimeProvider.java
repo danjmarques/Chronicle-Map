@@ -16,6 +16,7 @@
 
 package net.openhft.chronicle.hash.replication;
 
+import net.openhft.chronicle.core.Jvm;
 import net.openhft.chronicle.hash.ChronicleHash;
 import net.openhft.chronicle.hash.ChronicleHashBuilderPrivateAPI;
 
@@ -39,6 +40,7 @@ public final class TimeProvider {
 
     private static final AtomicLong lastTimeHolder = new AtomicLong();
     private static LongSupplier millisecondSupplier = System::currentTimeMillis;
+
     private TimeProvider() {
     }
 
@@ -61,6 +63,7 @@ public final class TimeProvider {
                 return lastTime;
             if (lastTimeHolder.compareAndSet(lastTime, now))
                 return now;
+            Jvm.nanoPause();
         }
     }
 

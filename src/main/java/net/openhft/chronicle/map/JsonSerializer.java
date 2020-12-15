@@ -31,9 +31,11 @@ import java.util.zip.GZIPOutputStream;
 /**
  * @author Rob Austin.
  */
-class JsonSerializer {
+final class JsonSerializer {
+    private JsonSerializer() {
+    }
 
-    static final String logErrorSuggestXStreem =
+    static final String LOG_ERROR_SUGGEST_X_STREAM =
             "map.getAll(<file>) and map.putAll(<file>) methods require the JSON XStream serializer, " +
                     "we don't include these artifacts by default as some users don't require this functionality. " +
                     "Please add the following artifacts to your project\n" +
@@ -49,29 +51,41 @@ class JsonSerializer {
                     "</dependency>\n";
     private static final Logger LOG = LoggerFactory.getLogger(JsonSerializer.class);
 
-    static synchronized <K, V> void getAll(File toFile, Map<K, V> map, List jsonConverters) throws IOException {
+    static synchronized <K, V> void getAll(final File toFile,
+                                           final Map<K, V> map,
+                                           final List<?> jsonConverters) throws IOException {
         final XStream xstream = xStream(map, jsonConverters);
-        OutputStream outputStream = new FileOutputStream(toFile);
+
+        try (OutputStream outputStream = createOutputStream(toFile)) {
+                xstream.toXML(map, outputStream);
+        }
+    }
+
+    static synchronized <K, V> void putAll(final File fromFile,
+                                           final Map<K, V> map,
+                                           final List<?> jsonConverters) throws IOException {
+        final XStream xstream = xStream(map, jsonConverters);
+
+        try (InputStream inputStream = createInputStream(fromFile)) {
+            xstream.fromXML(inputStream);
+        }
+    }
+
+    private static InputStream createInputStream(final File toFile) throws IOException {
         if (toFile.getName().toLowerCase().endsWith(".gz"))
-            outputStream = new GZIPOutputStream(outputStream);
-        try (OutputStream out = outputStream) {
-            xstream.toXML(map, out);
-        }
+            return new GZIPInputStream(new FileInputStream(toFile));
+        else
+            return new FileInputStream(toFile);
     }
 
-    static synchronized <K, V> void putAll(File fromFile, Map<K, V> map, List jsonConverters)
-            throws IOException {
-        final XStream xstream = xStream(map, jsonConverters);
-
-        InputStream inputStream = new FileInputStream(fromFile);
-        if (fromFile.getName().toLowerCase().endsWith(".gz"))
-            inputStream = new GZIPInputStream(inputStream);
-        try (InputStream out = inputStream) {
-            xstream.fromXML(out);
-        }
+    private static OutputStream createOutputStream(final File toFile) throws IOException {
+        if (toFile.getName().toLowerCase().endsWith(".gz"))
+            return new GZIPOutputStream(new FileOutputStream(toFile));
+        else
+            return new FileOutputStream(toFile);
     }
 
-    private static <K, V> XStream xStream(Map<K, V> map, List jsonConverters) {
+    private static <K, V> XStream xStream(final Map<K, V> map, final List<?> jsonConverters) {
         try {
             final XStream xstream = new XStream(new JettisonMappedXmlDriver());
             xstream.setMode(XStream.NO_REFERENCES);
@@ -95,12 +109,11 @@ class JsonSerializer {
 
             return xstream;
         } catch (NoClassDefFoundError e) {
-            throw new RuntimeException(logErrorSuggestXStreem, e);
+            throw new RuntimeException(LOG_ERROR_SUGGEST_X_STREAM, e);
         }
     }
 
-    private static <K, V> void registerChronicleMapConverter(Map<K, V> map, XStream xstream) {
+    private static <K, V> void registerChronicleMapConverter(final Map<K, V> map, final XStream xstream) {
         xstream.registerConverter(new VanillaChronicleMapConverter<>(map));
     }
 }
-

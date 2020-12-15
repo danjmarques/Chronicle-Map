@@ -16,8 +16,10 @@
 
 package net.openhft.chronicle.map.example;
 
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
+import net.openhft.chronicle.threads.NamedThreadFactory;
 import net.openhft.chronicle.values.Array;
 import net.openhft.chronicle.values.Values;
 
@@ -51,7 +53,7 @@ public class LotsOfEntriesMain {
     private static void workEntries(final boolean add)
             throws IOException, ExecutionException, InterruptedException {
         final long entries = 100_000_000;
-        File file = new File("/tmp/lotsOfEntries.dat");
+        File file = new File(OS.getTarget(), "lotsOfEntries.dat");
         final ChronicleMap<CharSequence, MyFloats> map = ChronicleMapBuilder
                 .of(CharSequence.class, MyFloats.class)
                 .entries(entries)
@@ -59,7 +61,8 @@ public class LotsOfEntriesMain {
                 .averageKeySize((Math.log(1.024) - Math.log(0.024)) * 24 + 2)
                 .createPersistedTo(file);
         int threads = Runtime.getRuntime().availableProcessors();
-        ExecutorService es = Executors.newFixedThreadPool(threads);
+        ExecutorService es = Executors.newFixedThreadPool(threads,
+                new NamedThreadFactory("test"));
         long block = (entries + threads - 1) / threads;
 
         final long start = System.nanoTime();

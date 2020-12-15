@@ -23,6 +23,7 @@ import net.openhft.chronicle.algo.locks.TryAcquireOperations;
 import net.openhft.chronicle.algo.locks.VanillaReadWriteWithWaitsLockingStrategy;
 import net.openhft.chronicle.bytes.Byteable;
 import net.openhft.chronicle.core.Jvm;
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 import net.openhft.chronicle.values.Array;
@@ -87,7 +88,7 @@ import static net.openhft.chronicle.algo.bytes.Access.checkedBytesStoreAccess;
 public class ProcessInstanceLimiter implements Runnable {
     private static final long DEFAULT_TIME_UPDATE_INTERVAL_MS = 100L;
     private static final String DEFAULT_SHARED_MAP_NAME = "ProcessInstanceLimiter_DEFAULT_SHARED_MAP_";
-    private static final String DEFAULT_SHARED_MAP_DIRECTORY = System.getProperty("java.io.tmpdir");
+    private static final String DEFAULT_SHARED_MAP_DIRECTORY = OS.getTarget();
     private static final String DEFAULT_PROCESS_NAME = "_DEFAULT_";
 
     static {

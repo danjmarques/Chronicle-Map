@@ -17,6 +17,9 @@
 package net.openhft.chronicle.map;
 
 import net.openhft.chronicle.core.Jvm;
+import net.openhft.chronicle.core.OS;
+import net.openhft.chronicle.core.util.Time;
+import net.openhft.chronicle.threads.NamedThreadFactory;
 import org.junit.Test;
 
 import java.io.File;
@@ -37,9 +40,9 @@ public class ChronicleMapSanityCheckTest {
     @Test
     public void testSanity1() throws IOException, InterruptedException {
 
-        String tmp = System.getProperty("java.io.tmpdir");
+        String tmp = OS.getTarget();
 
-        String pathname = tmp + "/testSanity1-" + UUID.randomUUID().toString() + ".dat";
+        String pathname = tmp + "/testSanity1-" + Time.uniqueId() + ".dat";
 
         File file = new File(pathname);
 
@@ -47,10 +50,12 @@ public class ChronicleMapSanityCheckTest {
                 file.getAbsolutePath().toString());
 
         ScheduledExecutorService producerExecutor =
-                Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() - 1);
+                Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() - 1,
+                        new NamedThreadFactory("producer"));
 
         ScheduledExecutorService consumerExecutor =
-                Executors.newSingleThreadScheduledExecutor();
+                Executors.newSingleThreadScheduledExecutor(
+                        new NamedThreadFactory("consumer"));
 
         int N = 1000;
 

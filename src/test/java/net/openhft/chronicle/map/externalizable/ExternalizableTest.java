@@ -17,6 +17,7 @@
 package net.openhft.chronicle.map.externalizable;
 
 import net.openhft.chronicle.core.OS;
+import net.openhft.chronicle.core.util.Time;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 import org.junit.Test;
@@ -29,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 public class ExternalizableTest {
     @Test
     public void externalizable() throws IOException {
-        String path = OS.TARGET + "/test-" + System.nanoTime() + ".map";
+        String path = OS.getTarget() + "/test-" + Time.uniqueId() + ".map";
         new File(path).deleteOnExit();
         try (ChronicleMap<Long, SomeClass> storage = ChronicleMapBuilder
                 .of(Long.class, SomeClass.class)

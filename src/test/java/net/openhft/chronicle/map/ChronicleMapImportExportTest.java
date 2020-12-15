@@ -18,7 +18,9 @@ package net.openhft.chronicle.map;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.core.io.Closeable;
+import net.openhft.chronicle.core.util.Time;
 import net.openhft.chronicle.core.values.LongValue;
 import net.openhft.chronicle.map.fromdocs.BondVOInterface;
 import net.openhft.chronicle.values.Values;
@@ -38,12 +40,12 @@ import static org.junit.Assert.assertEquals;
  */
 public class ChronicleMapImportExportTest {
 
-    public static final String TMP = System.getProperty("java.io.tmpdir");
+    public static final String TMP = OS.getTarget();
 
     @Test
     public void test() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         ChronicleMapBuilder<String, String> builder = ChronicleMapBuilder
@@ -68,7 +70,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testWithMapValue() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         System.out.println(file.getAbsoluteFile());
@@ -97,7 +99,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testWithMapOfMapValue() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         System.out.println(file.getAbsoluteFile());
@@ -127,7 +129,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testWithIntegerAndDouble() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         try (ChronicleMap<Integer, Double> expected = ChronicleMap.of(Integer.class, Double.class)
@@ -150,7 +152,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testWithCharSeq() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         System.out.println(file.getAbsolutePath());
@@ -178,10 +180,10 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testFromHashMap() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         System.out.println(file.getCanonicalFile());
 
-        File file2 = new File(TMP + "/chronicle-map-2" + System.nanoTime() + ".json");
+        File file2 = new File(TMP + "/chronicle-map-2" + Time.uniqueId() + ".json");
         System.out.println(file2.getCanonicalFile());
 
         HashMap<Integer, String> map = new HashMap<Integer, String>();
@@ -216,7 +218,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testWithLongValue() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         //file.deleteOnExit();
 
         System.out.println(file.getAbsolutePath());
@@ -250,7 +252,7 @@ public class ChronicleMapImportExportTest {
     @Test
     public void testBondVOInterface() throws IOException, InterruptedException {
 
-        File file = new File(TMP + "/chronicle-map-" + System.nanoTime() + ".json");
+        File file = new File(TMP + "/chronicle-map-" + Time.uniqueId() + ".json");
         file.deleteOnExit();
 
         System.out.println(file.getAbsolutePath());

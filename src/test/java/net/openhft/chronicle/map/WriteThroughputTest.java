@@ -16,6 +16,7 @@
 
 package net.openhft.chronicle.map;
 
+import net.openhft.chronicle.core.util.Time;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -44,7 +45,7 @@ public class WriteThroughputTest {
             doTest(count, size, map);
         }
 
-        File file = new File("bandwidthTest" + System.nanoTime() + ".deleteme");
+        File file = new File("bandwidthTest" + Time.uniqueId() + ".deleteme");
         file.deleteOnExit();
         try (ChronicleMap<CharSequence, CharSequence> map = ChronicleMapBuilder
                 .of(CharSequence.class, CharSequence.class)
@@ -57,7 +58,7 @@ public class WriteThroughputTest {
             doTest(count, size, map);
         }
 
-        File file2 = new File("bandwidthTest" + System.nanoTime() + ".snappy.deleteme");
+        File file2 = new File("bandwidthTest" + Time.uniqueId() + ".snappy.deleteme");
         file2.deleteOnExit();
         try (ChronicleMap<CharSequence, CharSequence> map = ChronicleMapBuilder
                 .of(CharSequence.class, CharSequence.class)
@@ -78,7 +79,7 @@ public class WriteThroughputTest {
         int count = 2 << 10;
         int size = 50 << 10;
 
-        File file3 = new File("bandwidthTest" + System.nanoTime() + ".Z.deleteme");
+        File file3 = new File("bandwidthTest" + Time.uniqueId() + ".Z.deleteme");
         file3.deleteOnExit();
         try (ChronicleMap<CharSequence, CharSequence> map = ChronicleMapBuilder
                 .of(CharSequence.class, CharSequence.class)

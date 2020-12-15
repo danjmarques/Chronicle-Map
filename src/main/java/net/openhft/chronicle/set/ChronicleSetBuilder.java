@@ -55,7 +55,7 @@ public final class ChronicleSetBuilder<K>
             };
 
     private ChronicleMapBuilder<K, DummyValue> chronicleMapBuilder;
-    private ChronicleSetBuilderPrivateAPI<K> privateAPI;
+    private final ChronicleSetBuilderPrivateAPI<K> privateAPI;
 
     ChronicleSetBuilder(Class<K> keyClass) {
         chronicleMapBuilder = ChronicleMapBuilder.of(keyClass, DummyValue.class)
@@ -367,7 +367,7 @@ public final class ChronicleSetBuilder<K>
     /**
      * @deprecated don't use private API in the client code
      */
-    @Deprecated
+    @Deprecated(/* to be removed in x.22 */)
     @Override
     public Object privateAPI() {
         return privateAPI;

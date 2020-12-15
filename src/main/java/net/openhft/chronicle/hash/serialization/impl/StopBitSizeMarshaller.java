@@ -19,6 +19,7 @@ package net.openhft.chronicle.hash.serialization.impl;
 import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.bytes.BytesUtil;
 import net.openhft.chronicle.hash.serialization.SizeMarshaller;
+import org.jetbrains.annotations.NotNull;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -28,6 +29,7 @@ public final class StopBitSizeMarshaller
     public static final StopBitSizeMarshaller INSTANCE = new StopBitSizeMarshaller();
     private static final long MIN_ENCODABLE_SIZE = Long.MIN_VALUE;
     private static final long MAX_ENCODABLE_SIZE = Long.MAX_VALUE;
+
     private StopBitSizeMarshaller() {
     }
 
@@ -78,6 +80,7 @@ public final class StopBitSizeMarshaller
         return BytesUtil.readStopBit(in);
     }
 
+    @NotNull
     @Override
     public StopBitSizeMarshaller readResolve() {
         return INSTANCE;

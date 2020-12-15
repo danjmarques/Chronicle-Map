@@ -16,6 +16,7 @@
 
 package net.openhft.chronicle.map.ipc;
 
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.map.ChronicleMap;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class StateMachineTutorial {
         ChronicleMap<Integer, StateMachineData> map = null;
 
         try {
-            File dataFile = new File(System.getProperty("java.io.tmpdir"), "hft-state-machine");
+            File dataFile = new File(OS.getTarget(), "hft-state-machine");
             map = ChronicleMapBuilder.of(Integer.class, StateMachineData.class)
                     .entries(8).create();
 

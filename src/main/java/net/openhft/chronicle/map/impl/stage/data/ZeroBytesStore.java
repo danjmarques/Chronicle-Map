@@ -19,6 +19,8 @@ package net.openhft.chronicle.map.impl.stage.data;
 import net.openhft.chronicle.bytes.BytesStore;
 import net.openhft.chronicle.bytes.RandomDataInput;
 import net.openhft.chronicle.core.OS;
+import net.openhft.chronicle.core.io.ReferenceOwner;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.nio.BufferOverflowException;
@@ -156,83 +158,105 @@ public enum ZeroBytesStore implements BytesStore<ZeroBytesStore, Void> {
     }
 
     @Override
-    public void reserve() throws IllegalStateException {
+    public void reserve(ReferenceOwner id) throws IllegalStateException {
     }
 
     @Override
-    public void release() throws IllegalStateException {
+    public boolean tryReserve(ReferenceOwner id) throws IllegalStateException {
+        return false;
     }
 
     @Override
-    public long refCount() {
+    public boolean reservedBy(ReferenceOwner owner) {
+        return true;
+    }
+
+    @Override
+    public void release(ReferenceOwner id) throws IllegalStateException {
+    }
+
+    @Override
+    public void releaseLast(ReferenceOwner id) throws IllegalStateException {
+    }
+
+    @Override
+    public int refCount() {
         return 0;
     }
 
-    @Override
-    public boolean tryReserve() {
-        throw new UnsupportedOperationException("todo");
-    }
-
+    @NotNull
     @Override
     public ZeroBytesStore writeByte(long l, byte b) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeShort(long l, short i) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeInt(long l, int i) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeOrderedInt(long l, int i) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeLong(long l, long l1) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeOrderedLong(long l, long l1) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeFloat(long l, float v) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeDouble(long l, double v) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeVolatileByte(long l, byte b) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeVolatileShort(long l, short i) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeVolatileInt(long l, int i) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore writeVolatileLong(long l, long l1) {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore write(long l, byte[] bytes, int i, int i1) {
         throw new UnsupportedOperationException();
@@ -243,6 +267,7 @@ public enum ZeroBytesStore implements BytesStore<ZeroBytesStore, Void> {
         throw new UnsupportedOperationException();
     }
 
+    @NotNull
     @Override
     public ZeroBytesStore write(long l, RandomDataInput randomDataInput, long l1, long l2) {
         throw new UnsupportedOperationException();

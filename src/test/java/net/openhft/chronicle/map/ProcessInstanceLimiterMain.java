@@ -17,6 +17,7 @@
 package net.openhft.chronicle.map;
 
 import net.openhft.chronicle.core.Jvm;
+import net.openhft.chronicle.core.OS;
 import net.openhft.chronicle.map.utility.ProcessInstanceLimiter;
 
 import java.io.File;
@@ -41,7 +42,7 @@ public class ProcessInstanceLimiterMain implements Runnable {
                 ChronicleMapBuilder.of(String.class, Data.class);
         builder.entries(10000);
         builder.minSegments(2);
-        File file = new File(System.getProperty("java.io.tmpdir") + "/" + sharedMapName);
+        File file = new File(OS.getTarget() + "/" + sharedMapName);
         this.theSharedMap = builder.create();
         Thread t = new Thread(this, "ProcessInstanceLimiterMain updater");
         t.setDaemon(true);
